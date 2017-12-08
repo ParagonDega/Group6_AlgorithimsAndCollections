@@ -109,6 +109,7 @@ public class BinarySearchTree<E> extends AbstractSet<E> {
 //        }
 //        return containsElement(p.right, obj);
 //    }
+    
     /**
      * Ensures that this BinarySearchTree object contains a specified element.
      * The worstTime(n) is O(n) and averageTime(n) is O(log n).
