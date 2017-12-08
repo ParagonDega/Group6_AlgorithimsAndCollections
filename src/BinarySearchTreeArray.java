@@ -70,6 +70,10 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     public boolean add(E element) {
+        int parent=0;
+        if (element == null) {
+            throw new NullPointerException();
+        }
         if (tree[root] == null) {
             tree[root] = new Entry(element, -1);
             size++;
@@ -83,21 +87,20 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                     return false;
                 }
                 if (comp < 0) {
-                    if (tree[i].left != 0) {
+                    if (temp.left != 0) {
+                        parent=temp.left;
                         temp = tree[temp.left];
-                        i++;
                     } else {
-                        tree[size] = new Entry(element, i);
-                        tree[i].left = size;
+                        tree[size] = new Entry(element, parent);
+                        tree[parent].left = size;
                         size++;
                         return true;
                     }
-                } else if (tree[i].right != 0) {
+                } else if (temp.right != 0) {
                     temp = tree[temp.right];
-                    i++;
                 } else {
-                    tree[size] = new Entry(element, i);
-                    tree[i].right = size;
+                    tree[size] = new Entry(element, parent);
+                    tree[parent].right = size;
                     size++;
                     return true;
                 }
