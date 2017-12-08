@@ -21,6 +21,15 @@ public class TreeTest {
         
         System.out.println(testTree.toString());
         
+        BinarySearchTreeArray<String> testTreeArray = new BinarySearchTreeArray<>();
+        
+        testTreeArray.add("dog");
+        testTreeArray.add("turtle");
+        testTreeArray.add("cat");
+        testTreeArray.add("ferret");
+        
+        System.out.println(testTreeArray.toString());
+        
     }
     
 }

@@ -8,10 +8,11 @@ import java.util.Iterator;
  */
 public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
+    private static final int DEFAULT_SIZE = 16;
     Entry<E>[] tree;
     int root, size;
 
-    protected static class Entry<E> {
+    protected class Entry<E> {
 
         protected E element;
         protected int left, right, parent;
@@ -32,9 +33,28 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     public BinarySearchTreeArray() {
-        root = 0;
+        tree = new Entry[DEFAULT_SIZE];
         size = 0;
+        //this(size);
     }//default constructor
+
+    /**
+     * Initialises this ArraySequence object to be empty, with a specified
+     * initial capacity.
+     *
+     * @param capacity - the initial capacity of this ArraySequence object.
+     *
+     * @throws IllegalArgumentException - if capacity is non-positive
+     */
+    public BinarySearchTreeArray(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Non-positive capacity: "
+                    + capacity);
+        }
+        tree = new Entry[capacity];
+        size = 0;
+        //modCount = 0;
+    }
 
     @Override
     public int size() {
@@ -50,7 +70,39 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     public boolean add(E element) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (tree[root] == null) {
+            tree[root] = new Entry(element, -1);
+            size++;
+            return true;
+        } else {
+            int i = 0, comp;
+            Entry temp = tree[root];
+            while (true) {
+                comp = ((Comparable) element).compareTo(temp.element);
+                if (comp == 0) {
+                    return false;
+                }
+                if (comp < 0) {
+                    if (tree[i].left != 0) {
+                        temp = tree[temp.left];
+                        i++;
+                    } else {
+                        tree[size] = new Entry(element, i);
+                        tree[i].left = size;
+                        size++;
+                        return true;
+                    }
+                } else if (tree[i].right != 0) {
+                    temp = tree[temp.right];
+                    i++;
+                } else {
+                    tree[size] = new Entry(element, i);
+                    tree[i].right = size;
+                    size++;
+                    return true;
+                }
+            }
+        }
     }
 
     public boolean remove(Object obj) {
