@@ -14,7 +14,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     protected static class Entry<E> {
 
         protected E element;
-        protected Entry<E> left = null, right = null, parent;
+        protected int left, right, parent;
 
         /**
          * Initializes this Entry object.
@@ -25,7 +25,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         /**
          * Initializes this Entry object from element and parent.
          */
-        public Entry(E element, Entry<E> parent) {
+        public Entry(E element, int parent) {
             this.element = element;
             this.parent = parent;
         }
