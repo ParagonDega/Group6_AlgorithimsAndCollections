@@ -29,9 +29,9 @@ public class TreeTest {
         testTreeArray.add("bird");
         testTreeArray.add("ferret");
         
-        System.out.println(testTreeArray.contains("fish"));
+        System.out.println(testTreeArray.contains("ferret"));
+       //testTreeArray.contains("turtle");
 
-        //System.out.println(testTreeArray.toString());
     }
 
 }
