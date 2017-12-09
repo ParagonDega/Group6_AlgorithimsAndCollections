@@ -29,6 +29,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         public Entry(E element, int parent) {
             this.element = element;
             this.parent = parent;
+            this.left = parent = -1;
+            this.right = parent = -1;
         }
     }
 
@@ -65,12 +67,42 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public boolean contains(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (tree[root] == null) {
+            return false;
+        }
+        return (containsElement(tree[root], obj)); //To change body of generated methods, choose Tools | Templates.
     }
 
+    protected boolean containsElement(Entry<E> e, Object obj) {
+        int comp;
+
+        if (e == null) {
+            return false;
+        }
+
+        Entry temp = e;
+        comp = ((Comparable) obj).compareTo(e.element);
+
+        if (comp == 0) {
+            return true;
+        }
+        if (temp.left == -1) {
+            return false;
+        } else if (comp < 0) {
+            return containsElement(tree[temp.left], obj);
+        } else if (temp.right == -1) {
+            return false;
+        } else {
+            return containsElement(tree[temp.right], obj);
+        }
+        // method requires a return method
+    }
+
+    @Override
     public boolean add(E element) {
-        int parent=0;
+        int parent = 0;
         if (element == null) {
             throw new NullPointerException();
         }
@@ -87,8 +119,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                     return false;
                 }
                 if (comp < 0) {
-                    if (temp.left != 0) {
-                        parent=temp.left;
+                    if (temp.left != -1) {
+                        parent = temp.left;
                         temp = tree[temp.left];
                     } else {
                         tree[size] = new Entry(element, parent);
@@ -96,7 +128,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                         size++;
                         return true;
                     }
-                } else if (temp.right != 0) {
+                } else if (temp.right != -1) {
+                    parent = temp.right;
                     temp = tree[temp.right];
                 } else {
                     tree[size] = new Entry(element, parent);
@@ -136,6 +169,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     @Override
     public Iterator<E> iterator() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     protected class ArrayIterator implements Iterator<E> {
