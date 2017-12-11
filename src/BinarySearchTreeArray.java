@@ -11,6 +11,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     private static final int DEFAULT_SIZE = 16;
     Entry<E>[] tree;
     int root, size;
+    protected int modCount = 0;
 
     protected class Entry<E> {
 
@@ -37,7 +38,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     public BinarySearchTreeArray() {
         tree = new Entry[DEFAULT_SIZE];
         size = 0;
-        //this(size);
     }//default constructor
 
     /**
@@ -84,7 +84,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
         Entry temp = e;
         comp = ((Comparable) obj).compareTo(e.element);
-
         if (comp == 0) {
             return true;
         }
@@ -109,6 +108,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         if (tree[root] == null) {
             tree[root] = new Entry(element, -1);
             size++;
+            //modCount++;
             return true;
         } else {
             int i = 0, comp;
@@ -126,6 +126,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                         tree[size] = new Entry(element, parent);
                         tree[parent].left = size;
                         size++;
+                        //modCount++;
                         return true;
                     }
                 } else if (temp.right != -1) {
@@ -135,6 +136,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                     tree[size] = new Entry(element, parent);
                     tree[parent].right = size;
                     size++;
+                    //modCount++;
                     return true;
                 }
             }
@@ -142,54 +144,121 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     public boolean remove(Object obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        Entry<E> e = getEntry(obj);
+        if (e == null) {
+            return false;
+        }
+        deleteEntry(e);
+        //modCount++;                                                             //Increments as an object has been removed from the tree
+        return true;
+    } // method remove
 
-//    protected Entry<E> getEntry(Object obj) {
-//        int temp = root, comp;
-//        while (temp != -1) {
-//            comp = ((Comparable) obj).compareTo(tree[temp].element);
-//            if (comp == 0) {
-//                return tree[temp];
-//            } else if (comp < 0) {
-//                emp = tree[temp].left;
-//            } else {
-//                temp = tree[temp].right;
-//            }
-//        } // while    return null; 
-//    } From coursework description
+    /**
+     * Finds the Entry object that houses a specified element, if there is such
+     * an Entry. The worstTime(n) is O(n), and averageTime(n) is O(log n).
+     *
+     * @param obj - the element whose Entry is sought.
+     *
+     * @return the Entry object that houses obj - if there is such an Entry;
+     * otherwise, return null.
+     *
+     * @throws ClassCastException - if obj is not comparable to the elements
+     * already in this BinarySearchTree object.
+     * @throws NullPointerException - if obj is null.
+     *
+     */
+    protected Entry<E> getEntry(Object obj) {
+        int comp;
+
+        if (obj == null) {
+            throw new NullPointerException();
+        }
+        Entry e = tree[root];
+        while (e != null) {
+            comp = ((Comparable) obj).compareTo(e.element);
+            if (comp == 0) {
+                return e;
+            } else if (comp < 0) {
+                e = tree[e.left];
+            } else {
+                e = tree[e.right];
+            }
+        } // while
+        return null;
+    } // method getEntry
+
     protected Entry<E> deleteEntry(Entry<E> p) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    protected Entry<E> successor(Entry<E> e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    protected int successor(int e) {
+        if (e == -1) {
+            return -1;
+        } else if (tree[e].right != -1) {
+            // successor is leftmost Entry in right subtree of e
+            int p = tree[e].right;
+            while (tree[p].left != -1) {
+                p = tree[p].left;
+            }
+            return p;
+
+        } // e has a right child
+        else {
+
+            // go up the tree to the left as far as possible, then go up
+            // to the right.
+            int p = tree[e].parent;
+            int ch = e;
+            while (p != -1 && ch == tree[p].right) {
+                ch = p;
+                p = tree[p].parent;
+            } // while
+            return p;
+
+        } // e has no right child
+    } // method successor    }
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+        return new ArrayIterator();
     }
 
     protected class ArrayIterator implements Iterator<E> {
 
+        protected Entry<E> lastReturned = null;
+        protected int next;
+
         protected ArrayIterator() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            next = root;
+            if (next != -1) {
+                while (tree[next].left != -1) {
+                    next = tree[next].left;
+                }
+            }
         }
-
         public boolean hasNext() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return next != -1;
         }
-
         public E next() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if (next == -1) {
+                throw new IllegalStateException();
+            }
+            lastReturned = tree[next];
+            next = successor(next);
+            return lastReturned.element;
         }
 
         public void remove() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if (lastReturned == null) {
+                throw new IllegalStateException();
+            }
+            if (lastReturned.left != -1 && lastReturned.right != -1) {
+
+            }
+            deleteEntry(lastReturned);
+            lastReturned = null;
+            //modCount++;
+            //expectedModCount++;
         }
-
     }
-
 }
