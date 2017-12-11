@@ -144,8 +144,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     public boolean remove(Object obj) {
-        Entry<E> e = getEntry(obj);
-        if (e == null) {
+        int e = getEntry(obj);
+        if (e == -1) {
             return false;
         }
         deleteEntry(e);
@@ -187,8 +187,34 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         return null;
     } // method getEntry
 
-    protected Entry<E> deleteEntry(Entry<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected Entry<E> deleteEntry(int p) {
+        size--;
+        // If p has two children, replace p's element with p's successor's
+        // element, then make p reference that successor.
+        if (tree[p].left != -1 && tree[p].right != -1) {
+            int s = successor(p);
+            tree[p].element = tree[s].element;
+            p = s;
+        }
+        // At this point, p has either no children or one child.
+        int replacement;
+        if (tree[p].left != -1) {
+            replacement = tree[p].left;
+        } else {
+            replacement = tree[p].right;
+        }
+        // If p has at least one child, link replacement to p.parent.
+        if (replacement != -1) {
+            tree[replacement].parent = tree[p].parent;
+            if (tree[p].parent == -1) {
+                root = replacement;
+            } else if (p == tree[tree[p].parent].left) {
+                tree[tree[p].parent].left = replacement;
+            } else {
+                tree[tree[p].parent].right = replacement;
+            }// p has a parent but no children 
+        }
+        return tree[p];
     }
 
     protected int successor(int e) {
@@ -201,10 +227,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                 p = tree[p].left;
             }
             return p;
-
         } // e has a right child
         else {
-
             // go up the tree to the left as far as possible, then go up
             // to the right.
             int p = tree[e].parent;
@@ -225,8 +249,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
     protected class ArrayIterator implements Iterator<E> {
 
-        protected Entry<E> lastReturned = null;
-        protected int next;
+        //protected Entry<E> lastReturned = null;
+        protected int next, lastReturned = -1;
 
         protected ArrayIterator() {
             next = root;
@@ -236,27 +260,29 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                 }
             }
         }
+
         public boolean hasNext() {
             return next != -1;
         }
+
         public E next() {
             if (next == -1) {
                 throw new IllegalStateException();
             }
-            lastReturned = tree[next];
+            lastReturned = next;
             next = successor(next);
-            return lastReturned.element;
+            return tree[lastReturned].element;
         }
 
         public void remove() {
-            if (lastReturned == null) {
+            if (lastReturned == -1) {
                 throw new IllegalStateException();
             }
-            if (lastReturned.left != -1 && lastReturned.right != -1) {
+            if (tree[lastReturned].left != -1 && tree[lastReturned].right != -1) {
 
             }
             deleteEntry(lastReturned);
-            lastReturned = null;
+            tree[lastReturned].element = null;
             //modCount++;
             //expectedModCount++;
         }

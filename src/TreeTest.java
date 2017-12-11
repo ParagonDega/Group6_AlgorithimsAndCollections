@@ -28,10 +28,9 @@ public class TreeTest {
         testTreeArray.add("cat");
         testTreeArray.add("bird");
         testTreeArray.add("ferret");
-        
+        System.out.println(testTreeArray.size());
         System.out.println(testTreeArray.contains("ferret"));
-       //testTreeArray.contains("turtle");
-
+        
     }
 
 }
