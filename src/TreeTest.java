@@ -30,7 +30,14 @@ public class TreeTest {
         testTreeArray.add("ferret");
         System.out.println(testTreeArray.size());
         System.out.println(testTreeArray.contains("ferret"));
-        
+
+        System.out.println(testTreeArray.toString());
+
+        for (String i : testTreeArray) {
+            System.out.println("Animal: " + i);
+            
+        }
+
     }
 
 }

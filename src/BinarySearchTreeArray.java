@@ -167,28 +167,29 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
      * @throws NullPointerException - if obj is null.
      *
      */
-    protected Entry<E> getEntry(Object obj) {
+    protected int getEntry(Object obj) {
         int comp;
 
         if (obj == null) {
             throw new NullPointerException();
         }
-        Entry e = tree[root];
-        while (e != null) {
-            comp = ((Comparable) obj).compareTo(e.element);
+        int e = root;
+        while (e != -1) {
+            comp = ((Comparable) obj).compareTo(tree[e].element);
             if (comp == 0) {
                 return e;
             } else if (comp < 0) {
-                e = tree[e.left];
+                e = tree[e].left;
             } else {
-                e = tree[e.right];
+                e = tree[e].right;
             }
         } // while
-        return null;
+        return -1;
     } // method getEntry
 
     protected Entry<E> deleteEntry(int p) {
         size--;
+
         // If p has two children, replace p's element with p's successor's
         // element, then make p reference that successor.
         if (tree[p].left != -1 && tree[p].right != -1) {
@@ -212,7 +213,9 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                 tree[tree[p].parent].left = replacement;
             } else {
                 tree[tree[p].parent].right = replacement;
-            }// p has a parent but no children 
+            }
+            // p has a parent but no children   
+            
         }
         return tree[p];
     }
@@ -227,8 +230,10 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                 p = tree[p].left;
             }
             return p;
+
         } // e has a right child
         else {
+
             // go up the tree to the left as far as possible, then go up
             // to the right.
             int p = tree[e].parent;
@@ -282,7 +287,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
             }
             deleteEntry(lastReturned);
-            tree[lastReturned].element = null;
+            lastReturned = -1;
             //modCount++;
             //expectedModCount++;
         }
