@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author greg
+ * @authors B00308929 && B00308927
  */
 public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
@@ -20,6 +20,9 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
         /**
          * Initializes this Entry object.
+         *
+         * This default constructor is defined for the sake of subclasses of the
+         * BinarySearchTreeArray class.
          */
         public Entry() {
         }
@@ -32,19 +35,25 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             this.parent = parent;
             this.left = parent = -1;
             this.right = parent = -1;
-        }
-    }
+        }// constructor
+    }// class Entry
 
+    /**
+     * Initializes this BinarySearchTreeArray object to be empty, to contain
+     * only elements of type E, to be ordered by the Comparable interface, and
+     * to contain no duplicate elements.
+     */
     public BinarySearchTreeArray() {
         tree = new Entry[DEFAULT_SIZE];
         size = 0;
     }//default constructor
 
     /**
-     * Initialises this ArraySequence object to be empty, with a specified
-     * initial capacity.
+     * Initialises this BinarySearchTreeArray object to be empty, with a
+     * specified initial capacity.
      *
-     * @param capacity - the initial capacity of this ArraySequence object.
+     * @param capacity - the initial capacity of this BinarySearchTreeArray
+     * object.
      *
      * @throws IllegalArgumentException - if capacity is non-positive
      */
@@ -58,15 +67,55 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         //modCount = 0;
     }
 
+    /**
+     * Returns the size of this BinarySearchTreeArray object. worstTime(n) is
+     * constant O(1).
+     *
+     * @return the size of this BinarySearchTreeArray object.
+     *
+     */
     @Override
     public int size() {
         return size;
     }
 
-    public BinarySearchTreeArray(BinarySearchTreeArray<? extends E> otherTree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        /**
+     * Initializes this BinarySearchTreeArray object to contain a shallow copy of a
+     * specified BinarySearchTreeArray object. The worstTime(n) is O(n), where n is
+     * the number of elements in the specified BinarySearchTreeArray object.
+     *
+     * @param otherTree - the specified BinarySearchTreeArray object that this
+     * BinarySearchTreeArray object will be assigned a shallow copy of.
+     */
+//    public BinarySearchTreeArray(BinarySearchTreeArray<? extends E> otherTree) {
+//        root = copy(otherTree.root, null);
+//        size = otherTree.size;
+//    } // copy constructor
+//
+//    protected Entry<E> copy(Entry<? extends E> p, Entry<E> parent) {
+//        if (p != null) {
+//            Entry<E> q = new Entry<E>(p.element, parent);
+//            q.left = copy(p.left, q);
+//            q.right = copy(p.right, q);
+//            return q;
+//        } // if
+//        return null;
+//    } // method copy
 
+       /**
+     * Determines if there is an element in this BinarySearchTreeArray object that
+     * equals a specified element. The worstTime(n) is O(n) and averageTime(n)
+     * is O(log n).
+     *
+     * @param obj – the element sought in this BinarySearchTreeArray object.
+     *
+     * @return true – if there is an element in this BinarySearchTreeArray object
+     * that equals obj; otherwise, return false.
+     *
+     * @throws ClassCastException – if obj is not null but cannot be compared to
+     * the elements already in this BinarySearchTreeArray object.
+     * @throws NullPointerException – if obj is null.
+     */
     @Override
     public boolean contains(Object obj) {
         if (tree[root] == null) {
@@ -99,6 +148,22 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         // method requires a return method
     }
 
+        /**
+     * Ensures that this BinarySearchTreeArray object contains a specified element.
+     * The worstTime(n) is O(n) and averageTime(n) is O(log n).
+     *
+     * @param element – the element whose presence is ensured in this
+     * BinarySearchTreeArray object.
+     *
+     * @return true – if this BinarySearchTreeArray object changed as a result of
+     * this method call (that is, if element was actually inserted); otherwise,
+     * return false.
+     *
+     * @throws ClassCastException – if element is not null but cannot be
+     * compared to the elements of this BinarySearchTreeArray object.
+     * @throws NullPointerException – if element is null.
+     *
+     */
     @Override
     public boolean add(E element) {
         int parent = 0;
@@ -143,6 +208,21 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         }
     }
 
+        /**
+     * Ensures that this BinarySearchTreeArray object does not contain a specified
+     * element. The worstTime(n) is O(n) and averageTime(n) is O(log n).
+     *
+     * @param obj – the object whose absence is ensured in this BinarySearchTreeArray
+     * object.
+     *
+     * @return true – if this BinarySearchTreeArray object changed as a result of
+     * this method call (that is, if obj was actually removed); otherwise,
+     * return false.
+     *
+     * @throws ClassCastException – if obj is not null but cannot be compared to
+     * the elements of this BinarySearchTreeArray object.
+     * @throws NullPointerException – if obj is null.
+     */
     public boolean remove(Object obj) {
         int e = getEntry(obj);
         if (e == -1) {
@@ -163,7 +243,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
      * otherwise, return null.
      *
      * @throws ClassCastException - if obj is not comparable to the elements
-     * already in this BinarySearchTree object.
+     * already in this BinarySearchTreeArray object.
      * @throws NullPointerException - if obj is null.
      *
      */
@@ -187,6 +267,17 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         return -1;
     } // method getEntry
 
+    /**
+     * Deletes the element in a specified Entry object from this
+     * BinarySearchTreeArray.
+     *
+     * @param p – the Entry object whose element is to be deleted from this
+     * BinarySearchTreeArray object.
+     *
+     * @return the Entry object that was actually deleted from this
+     * BinarySearchTreeArray object.
+     *
+     */
     protected Entry<E> deleteEntry(int p) {
         size--;
 
@@ -215,11 +306,20 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                 tree[tree[p].parent].right = replacement;
             }
             // p has a parent but no children   
-            
+
         }
         return tree[p];
     }
 
+    /**
+     * Finds the successor of a specified Entry object in this BinarySearchTreeArray.
+     * The worstTime(n) is O(n) and averageTime(n) is constant.
+     *
+     * @param e – the Entry object whose successor is to be found.
+     *
+     * @return the successor of e, if e has a successor; otherwise, return null.
+     *
+     */
     protected int successor(int e) {
         if (e == -1) {
             return -1;
@@ -247,6 +347,14 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         } // e has no right child
     } // method successor    }
 
+     /**
+     * Returns an iterator positioned at the smallest element in this
+     * BinarySearchTreeArray object.
+     *
+     * @return an iterator positioned at the smallest element (according to the
+     * element class’s implementation of the Comparable interface) in this
+     * BinarySearchTreeArray object.
+     */
     @Override
     public Iterator<E> iterator() {
         return new ArrayIterator();
@@ -257,6 +365,12 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         //protected Entry<E> lastReturned = null;
         protected int next, lastReturned = -1;
 
+         /**
+         * Positions this ArrayIterator to the smallest element, according to the
+         * Comparable interface, in the BinarySearchTreeArray object. The
+         * worstTime(n) is O(n) and averageTime(n) is O(log n).
+         *
+         */
         protected ArrayIterator() {
             next = root;
             if (next != -1) {
@@ -266,10 +380,31 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             }
         }
 
+         /**
+         * Determines if there are still some elements, in the BinarySearchTreeArray
+         * object this ArrayIterator object is iterating over, that have not been
+         * accessed by this ArrayIterator object.
+         *
+         * @return true – if there are still some elements that have not been
+         * accessed by this ArrayIterator object; otherwise, return false.
+         *
+         */
         public boolean hasNext() {
             return next != -1;
         }
 
+        /**
+         * Returns the element in the Entry this ArrayIterator object was
+         * positioned at before this call, and advances this ArrayIterator
+         * object. The worstTime(n) is O(n) and averageTime(n) is constant.
+         *
+         * @return the element this ArrayIterator object was positioned at before
+         * this call.
+         *
+         * @throws NoSuchElementException – if this ArrayIterator object was not
+         * positioned at an Entry before this call.
+         *
+         */
         public E next() {
             if (next == -1) {
                 throw new IllegalStateException();
@@ -279,6 +414,17 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             return tree[lastReturned].element;
         }
 
+         /**
+         * Removes the element returned by the most recent call to this
+         * ArrayIterator object’s next() method. The worstTime(n) is O(n) and
+         * averageTime(n) is constant.
+         *
+         * @throws IllegalStateException – if this ArrayIterator’s next() method
+         * was not called before this call, or if this ArrayIterator’s remove()
+         * method was called between the call to the next() method and this
+         * call.
+         *
+         */
         public void remove() {
             if (lastReturned == -1) {
                 throw new IllegalStateException();
