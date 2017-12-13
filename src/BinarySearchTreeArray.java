@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  *
- * @authors B00308929 && B00308927
+ * @authors B00308929 && B00308927 && B00287948
  */
 public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 
