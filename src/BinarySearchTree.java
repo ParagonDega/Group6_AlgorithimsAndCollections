@@ -260,7 +260,7 @@ public class BinarySearchTree<E> extends AbstractSet<E> {
         else if (p.parent == null) {
             root = null;
         } else if (p == p.parent.left) {
-            p.parent.left = null;
+////            p.parent.left = null;
         } else {
             p.parent.right = null;
         } // p has a parent but no children

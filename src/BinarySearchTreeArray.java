@@ -33,8 +33,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         public Entry(E element, int parent) {
             this.element = element;
             this.parent = parent;
-            this.left = parent = -1;
-            this.right = parent = -1;
+            this.left = /*parent =*/ -1;
+            this.right = /*parent =*/ -1;
         }// constructor
     }// class Entry
 
@@ -79,10 +79,11 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         return size;
     }
 
-        /**
-     * Initializes this BinarySearchTreeArray object to contain a shallow copy of a
-     * specified BinarySearchTreeArray object. The worstTime(n) is O(n), where n is
-     * the number of elements in the specified BinarySearchTreeArray object.
+    /**
+     * Initializes this BinarySearchTreeArray object to contain a shallow copy
+     * of a specified BinarySearchTreeArray object. The worstTime(n) is O(n),
+     * where n is the number of elements in the specified BinarySearchTreeArray
+     * object.
      *
      * @param otherTree - the specified BinarySearchTreeArray object that this
      * BinarySearchTreeArray object will be assigned a shallow copy of.
@@ -101,16 +102,15 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
 //        } // if
 //        return null;
 //    } // method copy
-
-       /**
-     * Determines if there is an element in this BinarySearchTreeArray object that
-     * equals a specified element. The worstTime(n) is O(n) and averageTime(n)
-     * is O(log n).
+    /**
+     * Determines if there is an element in this BinarySearchTreeArray object
+     * that equals a specified element. The worstTime(n) is O(n) and
+     * averageTime(n) is O(log n).
      *
      * @param obj – the element sought in this BinarySearchTreeArray object.
      *
-     * @return true – if there is an element in this BinarySearchTreeArray object
-     * that equals obj; otherwise, return false.
+     * @return true – if there is an element in this BinarySearchTreeArray
+     * object that equals obj; otherwise, return false.
      *
      * @throws ClassCastException – if obj is not null but cannot be compared to
      * the elements already in this BinarySearchTreeArray object.
@@ -130,7 +130,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         if (e == null) {
             return false;
         }
-
         Entry temp = e;
         comp = ((Comparable) obj).compareTo(e.element);
         if (comp == 0) {
@@ -148,16 +147,16 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         // method requires a return method
     }
 
-        /**
-     * Ensures that this BinarySearchTreeArray object contains a specified element.
-     * The worstTime(n) is O(n) and averageTime(n) is O(log n).
+    /**
+     * Ensures that this BinarySearchTreeArray object contains a specified
+     * element. The worstTime(n) is O(n) and averageTime(n) is O(log n).
      *
      * @param element – the element whose presence is ensured in this
      * BinarySearchTreeArray object.
      *
-     * @return true – if this BinarySearchTreeArray object changed as a result of
-     * this method call (that is, if element was actually inserted); otherwise,
-     * return false.
+     * @return true – if this BinarySearchTreeArray object changed as a result
+     * of this method call (that is, if element was actually inserted);
+     * otherwise, return false.
      *
      * @throws ClassCastException – if element is not null but cannot be
      * compared to the elements of this BinarySearchTreeArray object.
@@ -198,6 +197,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                     parent = temp.right;
                     temp = tree[temp.right];
                 } else {
+                    //parent = temp.right;
                     tree[size] = new Entry(element, parent);
                     tree[parent].right = size;
                     size++;
@@ -208,15 +208,16 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         }
     }
 
-        /**
-     * Ensures that this BinarySearchTreeArray object does not contain a specified
-     * element. The worstTime(n) is O(n) and averageTime(n) is O(log n).
+    /**
+     * Ensures that this BinarySearchTreeArray object does not contain a
+     * specified element. The worstTime(n) is O(n) and averageTime(n) is O(log
+     * n).
      *
-     * @param obj – the object whose absence is ensured in this BinarySearchTreeArray
-     * object.
+     * @param obj – the object whose absence is ensured in this
+     * BinarySearchTreeArray object.
      *
-     * @return true – if this BinarySearchTreeArray object changed as a result of
-     * this method call (that is, if obj was actually removed); otherwise,
+     * @return true – if this BinarySearchTreeArray object changed as a result
+     * of this method call (that is, if obj was actually removed); otherwise,
      * return false.
      *
      * @throws ClassCastException – if obj is not null but cannot be compared to
@@ -279,7 +280,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
      *
      */
     protected Entry<E> deleteEntry(int p) {
-        size--;
 
         // If p has two children, replace p's element with p's successor's
         // element, then make p reference that successor.
@@ -289,10 +289,10 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             p = s;
         }
         // At this point, p has either no children or one child.
-        int replacement;
+        int replacement = -1;
         if (tree[p].left != -1) {
             replacement = tree[p].left;
-        } else {
+        } else if (tree[p].right != -1) {
             replacement = tree[p].right;
         }
         // If p has at least one child, link replacement to p.parent.
@@ -301,19 +301,33 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             if (tree[p].parent == -1) {
                 root = replacement;
             } else if (p == tree[tree[p].parent].left) {
-                tree[tree[p].parent].left = replacement;
+                if (tree[p].left != -1) {
+                    tree[tree[p].parent].left = tree[p].left;
+                } else {
+                    tree[tree[p].parent].left = tree[p].right;
+                }
+            } else if (tree[p].left != -1) {
+                tree[tree[p].parent].left = tree[p].left;
             } else {
-                tree[tree[p].parent].right = replacement;
+                tree[tree[p].parent].right = tree[p].right;
             }
-            // p has a parent but no children   
-
+        } // p has a parent but no children  
+        else if (tree[p].parent == -1) {
+            tree[root].element = null;
+        } else if (p == tree[tree[p].parent].left) {
+            tree[tree[p].parent].left = -1;
+        } else {
+            tree[tree[p].parent].right = -1;
         }
+        tree[p].element = null;
+        size--;
         return tree[p];
     }
 
     /**
-     * Finds the successor of a specified Entry object in this BinarySearchTreeArray.
-     * The worstTime(n) is O(n) and averageTime(n) is constant.
+     * Finds the successor of a specified Entry object in this
+     * BinarySearchTreeArray. The worstTime(n) is O(n) and averageTime(n) is
+     * constant.
      *
      * @param e – the Entry object whose successor is to be found.
      *
@@ -347,7 +361,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         } // e has no right child
     } // method successor    }
 
-     /**
+    /**
      * Returns an iterator positioned at the smallest element in this
      * BinarySearchTreeArray object.
      *
@@ -365,9 +379,9 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         //protected Entry<E> lastReturned = null;
         protected int next, lastReturned = -1;
 
-         /**
-         * Positions this ArrayIterator to the smallest element, according to the
-         * Comparable interface, in the BinarySearchTreeArray object. The
+        /**
+         * Positions this ArrayIterator to the smallest element, according to
+         * the Comparable interface, in the BinarySearchTreeArray object. The
          * worstTime(n) is O(n) and averageTime(n) is O(log n).
          *
          */
@@ -380,10 +394,10 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             }
         }
 
-         /**
-         * Determines if there are still some elements, in the BinarySearchTreeArray
-         * object this ArrayIterator object is iterating over, that have not been
-         * accessed by this ArrayIterator object.
+        /**
+         * Determines if there are still some elements, in the
+         * BinarySearchTreeArray object this ArrayIterator object is iterating
+         * over, that have not been accessed by this ArrayIterator object.
          *
          * @return true – if there are still some elements that have not been
          * accessed by this ArrayIterator object; otherwise, return false.
@@ -398,8 +412,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
          * positioned at before this call, and advances this ArrayIterator
          * object. The worstTime(n) is O(n) and averageTime(n) is constant.
          *
-         * @return the element this ArrayIterator object was positioned at before
-         * this call.
+         * @return the element this ArrayIterator object was positioned at
+         * before this call.
          *
          * @throws NoSuchElementException – if this ArrayIterator object was not
          * positioned at an Entry before this call.
@@ -414,7 +428,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             return tree[lastReturned].element;
         }
 
-         /**
+        /**
          * Removes the element returned by the most recent call to this
          * ArrayIterator object’s next() method. The worstTime(n) is O(n) and
          * averageTime(n) is constant.
