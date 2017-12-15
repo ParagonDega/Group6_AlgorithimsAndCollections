@@ -18,9 +18,8 @@ public class TreeTest {
     public static void main(String[] args) {
 
         BinarySearchTree<String> testTree = new BinarySearchTree<>();
-        BinarySearchTreeArray<String> testTreeArray = new BinarySearchTreeArray<>();
+        BinarySearchTreeArray<String> testTreeArray = new BinarySearchTreeArray<>(4);
 
-        System.out.println("BST Test\n");
         testTree.add("dog");
         testTree.add("turtle");
         testTree.add("cat");
@@ -32,19 +31,9 @@ public class TreeTest {
         System.out.println(testTree.size());
         System.out.println(testTree.contains("ferret"));
 
-        for (String i : testTree) {
-            System.out.println("Animal: " + i);
-        }
-
         System.out.println(testTree.remove("cat"));
         System.out.println(testTree.remove("dog"));
         System.out.println(testTree.remove("turtle"));
-
-        for (String i : testTree) {
-            System.out.println("Animal: " + i);
-        }
-
-        System.out.println("\nBSTA Test\n");
 
         testTreeArray.add("dog");
         testTreeArray.add("turtle");
@@ -57,32 +46,25 @@ public class TreeTest {
         System.out.println(testTreeArray.size());
         System.out.println(testTreeArray.contains("ferret"));
 
-        for (String j : testTreeArray) {
-            System.out.println("Animal: " + j);
-        }
-
         System.out.println(testTreeArray.remove("cat"));
         System.out.println(testTreeArray.remove("dog"));
         System.out.println(testTreeArray.remove("turtle"));
 
-        for (String j : testTreeArray) {
-            System.out.println("Animal: " + j);
+        int count = 0;
+        int testSize = testTreeArray.size();
+        Iterator itr = testTreeArray.iterator();
+        while (itr.hasNext()) {
+            Object current = itr.next();
+            System.out.println("Animal: " + current);//Remove this before hand in
+            count++;
+            if (count == 4) {
+                itr.remove();
+            }
+            if (count > testSize * 2) {
+                System.out.println("Apparent infinite loop when appending"
+                        + " while iterating");
+                break;
+            }
         }
-
-        // Gets stuck in loop if you add then display for some reason.
-//        count = 0;
-//        testSize = testTreeArray.size();
-//        itr = testTreeArray.iterator();
-//        while(itr.hasNext()){
-//            Object current = itr.next();
-//            System.out.println("Animal: " + current);
-//            count++;
-//            if(count> testSize * 2){
-//                System.out.println("Apparent infinite loop when appending"
-//                            + " while iterating");
-//            break;
-//            }
-//        }
     }
-    // Are we even using the Iterator? It's never intialised in this class.
 }

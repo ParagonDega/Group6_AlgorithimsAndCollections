@@ -1,6 +1,7 @@
 
 import java.util.AbstractSet;
 import java.util.Iterator;
+import java.util.Arrays;
 
 /**
  *
@@ -80,29 +81,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
     }
 
     /**
-     * Initializes this BinarySearchTreeArray object to contain a shallow copy
-     * of a specified BinarySearchTreeArray object. The worstTime(n) is O(n),
-     * where n is the number of elements in the specified BinarySearchTreeArray
-     * object.
-     *
-     * @param otherTree - the specified BinarySearchTreeArray object that this
-     * BinarySearchTreeArray object will be assigned a shallow copy of.
-     */
-//    public BinarySearchTreeArray(BinarySearchTreeArray<? extends E> otherTree) {
-//        root = copy(otherTree.root, null);
-//        size = otherTree.size;
-//    } // copy constructor
-//
-//    protected Entry<E> copy(Entry<? extends E> p, Entry<E> parent) {
-//        if (p != null) {
-//            Entry<E> q = new Entry<E>(p.element, parent);
-//            q.left = copy(p.left, q);
-//            q.right = copy(p.right, q);
-//            return q;
-//        } // if
-//        return null;
-//    } // method copy
-    /**
      * Determines if there is an element in this BinarySearchTreeArray object
      * that equals a specified element. The worstTime(n) is O(n) and
      * averageTime(n) is O(log n).
@@ -169,6 +147,9 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         if (element == null) {
             throw new NullPointerException();
         }
+        if (this.size == tree.length) {
+            tree = Arrays.copyOf(tree, (tree.length * 2));
+        }
         if (tree[root] == null) {
             tree[root] = new Entry(element, -1);
             size++;
@@ -197,7 +178,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
                     parent = temp.right;
                     temp = tree[temp.right];
                 } else {
-                    //parent = temp.right;
                     tree[size] = new Entry(element, parent);
                     tree[parent].right = size;
                     size++;
