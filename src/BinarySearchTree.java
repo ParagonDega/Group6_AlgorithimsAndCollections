@@ -13,8 +13,8 @@ public class BinarySearchTree<E> extends AbstractSet<E> {
 
         protected E element;
         protected Entry<E> left = null,
-                right = null,
-                parent;
+                           right = null,
+                           parent;
 
         /**
          * Initializes this Entry object.

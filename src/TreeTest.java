@@ -54,13 +54,7 @@ public class TreeTest {
             
         }
          
-//         testTreeArray.add("bork");
-//         System.out.println();
-//         
-//          for (String i : testTreeArray) {
-//            System.out.println("Animal: " + i);
-//            
-//        }                                                                     // Gets stuck in loop if you add then display for some reason.
+// Gets stuck in loop if you add then display for some reason.
 
     }
                                                                                 // Are we even using the Iterator? It's never intialised in this class.
