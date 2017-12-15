@@ -13,8 +13,8 @@ public class BinarySearchTree<E> extends AbstractSet<E> {
 
         protected E element;
         protected Entry<E> left = null,
-                right = null,
-                parent;
+                           right = null,
+                           parent;
 
         /**
          * Initializes this Entry object.
@@ -260,7 +260,7 @@ public class BinarySearchTree<E> extends AbstractSet<E> {
         else if (p.parent == null) {
             root = null;
         } else if (p == p.parent.left) {
-            p.parent.left = null;
+////            p.parent.left = null;
         } else {
             p.parent.right = null;
         } // p has a parent but no children
