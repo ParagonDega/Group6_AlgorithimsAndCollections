@@ -2,9 +2,7 @@
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Arrays;
-
 import java.util.NoSuchElementException;
-
 
 /**
  *
@@ -37,8 +35,8 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         public Entry(E element, int parent) {
             this.element = element;
             this.parent = parent;
-            this.left = /*parent =*/ -1;
-            this.right = /*parent =*/ -1;
+            this.left = parent = -1;
+            this.right = parent = -1;
         }// constructor
     }// class Entry
 
@@ -162,7 +160,6 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
         {
             throw new ClassCastException();
         }
-
         if (this.size == tree.length) {
             tree = Arrays.copyOf(tree, (tree.length * 2));
         }
@@ -284,6 +281,7 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
      *
      */
     protected Entry<E> deleteEntry(int p) {
+        size--;
 
         // If p has two children, replace p's element with p's successor's
         // element, then make p reference that successor.
@@ -293,10 +291,10 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             p = s;
         }
         // At this point, p has either no children or one child.
-        int replacement = -1;
+        int replacement;
         if (tree[p].left != -1) {
             replacement = tree[p].left;
-        } else if (tree[p].right != -1) {
+        } else {
             replacement = tree[p].right;
         }
         // If p has at least one child, link replacement to p.parent.
@@ -305,26 +303,13 @@ public class BinarySearchTreeArray<E> extends AbstractSet<E> {
             if (tree[p].parent == -1) {
                 root = replacement;
             } else if (p == tree[tree[p].parent].left) {
-                if (tree[p].left != -1) {
-                    tree[tree[p].parent].left = tree[p].left;
-                } else {
-                    tree[tree[p].parent].left = tree[p].right;
-                }
-            } else if (tree[p].left != -1) {
-                tree[tree[p].parent].left = tree[p].left;
+                tree[tree[p].parent].left = replacement;
             } else {
-                tree[tree[p].parent].right = tree[p].right;
+                tree[tree[p].parent].right = replacement;
             }
-        } // p has a parent but no children  
-        else if (tree[p].parent == -1) {
-            tree[root].element = null;
-        } else if (p == tree[tree[p].parent].left) {
-            tree[tree[p].parent].left = -1;
-        } else {
-            tree[tree[p].parent].right = -1;
+            // p has a parent but no children   
+
         }
-        tree[p].element = null;
-        size--;
         return tree[p];
     }
 
