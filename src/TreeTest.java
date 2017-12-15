@@ -35,6 +35,8 @@ public class TreeTest {
         System.out.println(testTree.remove("dog"));
         System.out.println(testTree.remove("turtle"));
 
+        
+        
         testTreeArray.add("dog");
         testTreeArray.add("turtle");
         testTreeArray.add("cat");
@@ -43,6 +45,7 @@ public class TreeTest {
         testTreeArray.add("deer");
         testTreeArray.add("zebra");
         testTreeArray.add("frog");
+        
         System.out.println(testTreeArray.size());
         System.out.println(testTreeArray.contains("ferret"));
 
@@ -66,19 +69,5 @@ public class TreeTest {
                 break;
             }
         }
-
-        
-        System.out.println();
-        testTreeArray.add("norwol");
-        testTreeArray.remove("turtle");
-        
-         for (String i : testTreeArray) {
-            System.out.println("Animal: " + i);
-            
-        }
-         
-// Gets stuck in loop if you add then display for some reason.
-
-
     }
 }
